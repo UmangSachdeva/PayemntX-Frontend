@@ -11,6 +11,8 @@ import { Database, UploadCloud } from "lucide-react";
 import { useAddTransaction } from "@/api/mutations/payment";
 import { CircularProgress } from "@heroui/progress";
 import { addToast } from "@heroui/toast";
+import { Card, CardBody } from "@heroui/card";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface ExtractedTextProps {
   file: File;
@@ -87,7 +89,16 @@ const ExtractedText: React.FC<ExtractedTextProps> = ({ file, setFile }) => {
 
   return (
     <div>
-      <TransactionTable analysis={transactions} />
+      <Card className="bg-bgSecondary ">
+        <CardBody className="gap-4">
+          <h2 className="flex items-center gap-2 text-xl font-semibold">
+            <Icon icon="lucide:list" className="text-2xl text-primary" />
+            Recent Transactions
+          </h2>
+          <TransactionTable analysis={transactions} />
+        </CardBody>
+      </Card>
+
       <div className="flex justify-center gap-4 mt-4">
         <Button className="bg-primary text-bg" onPress={handleUploadToDatabase}>
           {" "}

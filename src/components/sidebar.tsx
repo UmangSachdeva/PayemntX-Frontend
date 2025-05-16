@@ -1,26 +1,39 @@
+import { useGetUserTransactions } from "@/api/queries/payment";
 import { Button } from "@heroui/button";
 import { Divider } from "@heroui/divider";
 import { Icon } from "@iconify/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 interface SidebarProps {
   isOpen: boolean;
 }
 
 export default function Sidebar({ isOpen }: SidebarProps) {
+  const location = useLocation();
+  const [pathname, setPathname] = useState<string>(location.pathname);
+
+  const { data: recentTransactions } = useGetUserTransactions({
+    limit: 3,
+  });
+
   const menuItems = [
-    { icon: "lucide:home", label: "Dashboard" },
-    { icon: "lucide:users", label: "Team" },
-    { icon: "lucide:folder", label: "Projects" },
-    { icon: "lucide:calendar", label: "Calendar" },
-    { icon: "lucide:settings", label: "Settings" },
+    { icon: "lucide:home", label: "Dashboard", to: "/dashboard" },
+    { icon: "hugeicons:bank", label: "Transactions", to: "/transactions" },
+    { icon: "lucide:chart-line", label: "Analysis", to: "/analysis" },
+    { icon: "lucide:calendar", label: "Calendar", to: "#" },
+    { icon: "lucide:settings", label: "Settings", to: "#" },
   ];
 
-  const recentTransactions = [
-    { id: 1, description: "Grocery Store", amount: -125.5, type: "expense" },
-    { id: 2, description: "Salary Deposit", amount: 3200.0, type: "income" },
-    { id: 3, description: "Electric Bill", amount: -180.25, type: "expense" },
-  ];
+  const isActive = (path: string) => {
+    return location.pathname == path;
+  };
+
+  useEffect(() => {
+    if (location.pathname) {
+      setPathname(location.pathname);
+    }
+  }, [location.pathname]);
 
   return (
     <aside
@@ -33,21 +46,32 @@ export default function Sidebar({ isOpen }: SidebarProps) {
       p-4
     `}
     >
-      <nav className={`flex flex-col gap-2 ${isOpen ? "" : "items-center"}`}>
+      <div className={`flex flex-col gap-2 ${isOpen ? "" : "items-center"}`}>
         {menuItems.map((item) => (
+          // <Link
+          //   key={item.label}
+          //   className={`justify-start  ${!isOpen && "justify-center"}`}
+          //   to={item?.to}
+          // >
           <Button
             key={item.label}
+            as={Link}
+            className={`justify-start group ${!isOpen && "justify-center"} ${isActive(item.to) ? "bg-primary text-bg hover:bg-primaryDark hover:text-textSecondary" : ""} hover:shadow-lg 
+  transition-all duration-300 w-full `}
             variant="light"
-            className={`justify-start ${!isOpen && "justify-center"} hover:bg-primaryDark hover:shadow-lg 
-  transition-all duration-300`}
             startContent={
-              <Icon icon={item.icon} className="text-xl text-primary" />
+              <Icon
+                icon={item.icon}
+                className={`text-xl  ${isActive(item.to) ? "text-bg group-hover:text-textSecondary" : "text-primary "}`}
+              />
             }
+            to={item.to}
           >
             {isOpen && <span>{item.label}</span>}
           </Button>
+          // </Link>
         ))}
-      </nav>
+      </div>
       <Divider className="my-4 mr-4" />
 
       <div className="space-y-3">
@@ -58,9 +82,9 @@ export default function Sidebar({ isOpen }: SidebarProps) {
           {isOpen && "Recent Transactions"}
         </h3>
 
-        {recentTransactions.map((transaction) => (
+        {recentTransactions?.data?.map((transaction) => (
           <div
-            key={transaction.id}
+            key={transaction?.id}
             className={`
               flex items-center gap-2
               text-sm p-2 rounded-lg 
@@ -70,7 +94,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
             `}
             title={
               !isOpen
-                ? `${transaction.description}: ${transaction.type === "income" ? "+" : "-"}$${Math.abs(transaction.amount).toFixed(2)}`
+                ? `${transaction?.details}: ${transaction?.type === "CREDIT" ? "+" : "-"}$${Math.abs(transaction.amount).toFixed(2)}`
                 : undefined
             }
           >
@@ -87,9 +111,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
             />
             {isOpen && (
               <>
-                <span className="flex-1 truncate">
-                  {transaction.description}
-                </span>
+                <span className="flex-1 truncate">{transaction.details}</span>
                 <span
                   className={`font-medium ${
                     transaction.type === "income"
@@ -97,7 +119,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
                       : "text-danger-500"
                   }`}
                 >
-                  {transaction.type === "income" ? "+" : "-"}$
+                  {transaction.type === "CREDIT" ? "+" : "-"}$
                   {Math.abs(transaction.amount).toFixed(2)}
                 </span>
               </>

@@ -1,4 +1,5 @@
 export type Transaction = {
+  id?: string;
   transaction_date: Date;
   value_date: Date;
   details: string;
@@ -8,17 +9,6 @@ export type Transaction = {
   balance: number;
   transaction_time: string;
 };
-
-// {
-//     "amount": 72,
-//     "balance": 1304.51,
-//     "details": "UPI/Sardar A Pure M/537837063801/UPI UPI-501273536180",
-//     "transaction_date": "12 Jan 2025 03:19 PM",
-//     "transaction_no": "1",
-//     "transaction_time": "03:19 PM",
-//     "type": "DEBIT",
-//     "value_date": "12 Jan 2025"
-//   }
 
 export function parseKotakStatement(text: string): Transaction[] {
   const regex =
