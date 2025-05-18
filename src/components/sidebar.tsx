@@ -2,8 +2,8 @@ import { useGetUserTransactions } from "@/api/queries/payment";
 import { Button } from "@heroui/button";
 import { Divider } from "@heroui/divider";
 import { Icon } from "@iconify/react";
-import React, { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,7 +11,7 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen }: SidebarProps) {
   const location = useLocation();
-  const [pathname, setPathname] = useState<string>(location.pathname);
+  const [_, setPathname] = useState<string>(location.pathname);
 
   const { data: recentTransactions } = useGetUserTransactions({
     limit: 3,

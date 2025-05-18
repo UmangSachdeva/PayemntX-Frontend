@@ -1,9 +1,13 @@
 import { Navbar } from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 
-export default function DefaultLayout() {
+interface DefaultLayoutProps {
+  children?: ReactNode;
+}
+
+export default function DefaultLayout({ children }: DefaultLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
@@ -17,7 +21,7 @@ export default function DefaultLayout() {
         <Sidebar isOpen={isSidebarOpen} />
         <main className="flex-1 p-6 overflow-auto">
           {/* <h1 className="text-2xl font-bold">Dashboard</h1> */}
-          <Outlet />
+          {children ?? <Outlet />}
         </main>
       </div>
     </div>

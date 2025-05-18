@@ -5,7 +5,6 @@ import { Button } from "@heroui/button";
 import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import NoSidebar from "@/layouts/nosidebarlayout";
 import Form from "@/components/form";
 import Input from "@/components/input";
 import { authValidator } from "@/validations/auth";

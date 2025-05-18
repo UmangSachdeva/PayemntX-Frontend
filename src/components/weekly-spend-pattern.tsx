@@ -30,7 +30,7 @@ export const WeeklySpendPattern = () => {
         <LineGraph
           width="100%"
           height="100%"
-          data={patterns}
+          data={patterns || []}
           xAxisKey="dayOfWeek"
           lines={[{ dataKey: "total_spend", stroke: "#1DCD9F" }]}
         />

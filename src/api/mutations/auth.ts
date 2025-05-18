@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
-import { Group, LoginCreds, SignupCreds } from "@/types/auth";
+import { LoginCreds, SignupCreds } from "@/types/auth";
 
 import { addToast } from "@heroui/toast";
 

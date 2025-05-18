@@ -5,14 +5,14 @@ import Input from "@/components/input";
 
 import NoSidebarLayout from "@/layouts/nosidebarlayout";
 import { SignupCreds } from "@/types/auth";
-import { authValidator, signupValidator } from "@/validations/auth";
+import { signupValidator } from "@/validations/auth";
 import { Button } from "@heroui/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { Divider } from "@heroui/divider";
 import { CircularProgress } from "@heroui/progress";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CreditCard, Eye, EyeOff, Lock, LogIn } from "lucide-react";
-import React, { useState } from "react";
+import { CreditCard, Eye, EyeOff, Lock } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Signup() {

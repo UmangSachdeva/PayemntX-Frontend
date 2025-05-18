@@ -3,11 +3,11 @@ import { Route, Routes } from "react-router-dom";
 import Login from "@/pages/login";
 import Signup from "@/pages/signup";
 import Dashboard from "@/pages/dashboard";
-import PrivateRoute from "./components/PrivateRoute";
 import Transactions from "./pages/transactions";
 import DefaultLayout from "./layouts/default";
 import NoSidebarLayout from "./layouts/nosidebarlayout";
 import Analysis from "./pages/analysis";
+import PrivateRoute from "./components/privateRoute";
 // import About from "@/pages/about";
 
 function App() {

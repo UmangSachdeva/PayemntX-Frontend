@@ -1,4 +1,3 @@
-import React from "react";
 import {
   CartesianGrid,
   Cell,
@@ -59,8 +58,18 @@ export const ScatterGraph = ({
         }}
       >
         {showGrid && <CartesianGrid strokeDasharray="3 3" />}
-        <XAxis type="number" dataKey={xAxisKey} name={xAxisKey} {...xAxisProps} />
-        <YAxis type="number" dataKey={yAxisKey} name={yAxisKey} {...yAxisProps} />
+        <XAxis
+          type="number"
+          dataKey={xAxisKey}
+          name={xAxisKey}
+          {...xAxisProps}
+        />
+        <YAxis
+          type="number"
+          dataKey={yAxisKey}
+          name={yAxisKey}
+          {...yAxisProps}
+        />
         <Tooltip
           formatter={tooltipFormatter}
           labelFormatter={labelFormatter}

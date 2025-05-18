@@ -1,5 +1,4 @@
 import { Transaction } from "@/utils/parseTransactions";
-import { Card, CardBody } from "@heroui/card";
 import {
   Table,
   TableHeader,

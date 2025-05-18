@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React from "react";
 
 export type FormProps = {
   className?: string;

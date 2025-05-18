@@ -4,7 +4,7 @@ import { BarChartComponent } from "./bar-chart";
 import { useState } from "react";
 
 export const MonthlySpends = () => {
-  const [type, setType] = useState<"DEBIT" | "CREDIT">("DEBIT");
+  const [type] = useState<"DEBIT" | "CREDIT">("DEBIT");
 
   const { data: debittransactions } = useGetMonthlySpends({
     type: type,

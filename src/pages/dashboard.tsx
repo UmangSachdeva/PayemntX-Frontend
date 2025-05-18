@@ -14,8 +14,7 @@ import { Card } from "@heroui/card";
 
 function Dashboard() {
   const [file, setFile] = useState<File | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [_, setIsAnalyzing] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles[0]) {
