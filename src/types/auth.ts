@@ -12,3 +12,9 @@ export type SignupCreds = {
 export type Group = {
   status?: string;
 };
+
+export type UserDetailsResponse = {
+  email: string;
+  name: string;
+  status: string;
+};

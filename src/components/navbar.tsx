@@ -14,6 +14,7 @@ import {
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useNavigate } from "react-router-dom";
+import { useGetUserDetails } from "@/api/queries/auth";
 
 type NavbarType = {
   isSidebarOpen: boolean;
@@ -22,6 +23,7 @@ type NavbarType = {
 
 export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarType) => {
   const nav = useNavigate();
+  const { data: user } = useGetUserDetails();
 
   const onLogout = () => {
     localStorage.removeItem("authToken");
@@ -47,20 +49,15 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarType) => {
               isBordered
               as="button"
               className="transition-transform"
-              name="John Doe"
-              src="https://img.heroui.chat/image/avatar?w=200&h=200&u=1"
+              name={user?.name}
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="gap-2 h-14">
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">john.doe@example.com</p>
+              <p className="font-semibold">{user?.email}</p>
             </DropdownItem>
 
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
             <DropdownItem key="logout" color="danger" onPress={onLogout}>
               Log Out
             </DropdownItem>

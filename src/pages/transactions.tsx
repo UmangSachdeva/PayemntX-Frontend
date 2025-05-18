@@ -51,10 +51,8 @@ function Transactions() {
         <div className="flex justify-center items-center mt-4 w-full">
           <Pagination
             showControls
-            // initialPage={1}
-            total={
-              Math.ceil((analysis?.total || 0) / (analysis?.limit || 0)) || 0
-            }
+            initialPage={page}
+            total={Math.ceil((analysis?.total || 0) / (analysis?.limit || 1))}
             // total={10}
             onChange={(page) => setPage(page)}
           />
