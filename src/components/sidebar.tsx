@@ -3,6 +3,7 @@ import { Button } from "@heroui/button";
 import { Divider } from "@heroui/divider";
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 
 interface SidebarProps {
@@ -36,28 +37,42 @@ export default function Sidebar({ isOpen }: SidebarProps) {
   }, [location.pathname]);
 
   return (
-    <aside
+    <motion.aside
+      initial={{ x: -100, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: -100, opacity: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
       className={`
       ${isOpen ? "w-64" : "w-20"} 
-      transition-all overflow-hidden duration-300 
+      transition-all duration-300
+      ease-in-out
+      overflow-hidden
       min-h-[calc(100vh-64px)] 
       border-r border-divider 
       bg-background
       p-4
-    `}
+      transform
+      ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-10 opacity-0 md:opacity-100 md:translate-x-0"}
+      ${
+        // On mobile: absolute, hidden when closed, visible when open
+        isOpen
+          ? "fixed inset-y-0 left-0 z-50 top-16 md:static"
+          : "hidden md:block md:relative"
+      }
+      `}
+      style={{
+        ...(isOpen && window.innerWidth < 768
+          ? { boxShadow: "0 0 0 9999px rgba(0,0,0,0.2)" }
+          : {}),
+      }}
     >
       <div className={`flex flex-col gap-2 ${isOpen ? "" : "items-center"}`}>
         {menuItems.map((item) => (
-          // <Link
-          //   key={item.label}
-          //   className={`justify-start  ${!isOpen && "justify-center"}`}
-          //   to={item?.to}
-          // >
           <Button
             key={item.label}
             as={Link}
             className={`justify-start group ${!isOpen && "justify-center"} ${isActive(item.to) ? "bg-primary text-bg hover:bg-primaryDark hover:text-textSecondary" : ""} hover:shadow-lg 
-  transition-all duration-300 w-full `}
+    transition-all duration-300 w-full `}
             variant="light"
             startContent={
               <Icon
@@ -69,7 +84,6 @@ export default function Sidebar({ isOpen }: SidebarProps) {
           >
             {isOpen && <span>{item.label}</span>}
           </Button>
-          // </Link>
         ))}
       </div>
       <Divider className="my-4 mr-4" />
@@ -82,31 +96,16 @@ export default function Sidebar({ isOpen }: SidebarProps) {
           {isOpen && "Recent Transactions"}
         </h3>
 
-        {!isPending &&
-          (!recentTransactions?.data ||
-            recentTransactions.data.length === 0) && (
-            <div
-              className={`
-              flex items-center gap-2
-              text-sm p-2 rounded-lg text-default-400
-              ${!isOpen && "justify-center"}
-            `}
-            >
-              <Icon icon="lucide:ban" className="text-default-300" />
-              {isOpen && <span>No recent transactions</span>}
-            </div>
-          )}
-
         {isPending &&
           Array.from({ length: 3 }).map((_, idx) => (
             <div
               key={idx}
               className={`
-                flex items-center gap-2
-                text-sm p-2 rounded-lg 
-                animate-pulse bg-default-100
-                ${!isOpen && "justify-center"}
-              `}
+          flex items-center gap-2
+          text-sm p-2 rounded-lg 
+          animate-pulse bg-default-100
+          ${!isOpen && "justify-center"}
+          `}
             >
               <div
                 className={`rounded-full bg-default-300 ${!isOpen ? "w-6 h-6" : "w-5 h-5"}`}
@@ -124,12 +123,12 @@ export default function Sidebar({ isOpen }: SidebarProps) {
           <div
             key={transaction?.id}
             className={`
-              flex items-center gap-2
-              text-sm p-2 rounded-lg 
-              hover:bg-default-100 
-              transition-colors
-              ${!isOpen && "justify-center"}
-            `}
+          flex items-center gap-2
+          text-sm p-2 rounded-lg 
+          hover:bg-default-100 
+          transition-colors
+          ${!isOpen && "justify-center"}
+        `}
             title={
               !isOpen
                 ? `${transaction?.details}: ${transaction?.type === "CREDIT" ? "+" : "-"}$${Math.abs(transaction.amount).toFixed(2)}`
@@ -143,9 +142,9 @@ export default function Sidebar({ isOpen }: SidebarProps) {
                   : "lucide:arrow-up-right"
               }
               className={`
-                ${transaction.type === "income" ? "text-success-500" : "text-danger-500"}
-                ${!isOpen && "text-xl"}
-              `}
+          ${transaction.type === "income" ? "text-success-500" : "text-danger-500"}
+          ${!isOpen && "text-xl"}
+          `}
             />
             {isOpen && (
               <>
@@ -165,6 +164,6 @@ export default function Sidebar({ isOpen }: SidebarProps) {
           </div>
         ))}
       </div>
-    </aside>
+    </motion.aside>
   );
 }
