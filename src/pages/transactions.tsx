@@ -44,19 +44,24 @@ function Transactions() {
           <Skeleton className="rounded-lg">
             <div className="h-[400px] rounded-lg bg-default-300" />
           </Skeleton>
+        ) : analysis?.data && analysis.data.length > 0 ? (
+          <TransactionTable analysis={analysis.data} />
         ) : (
-          <TransactionTable analysis={analysis?.data || []} />
+          <div className="flex flex-col items-center justify-center py-16">
+            <p className="text-lg text-default-500">No transactions found.</p>
+          </div>
         )}
 
-        <div className="flex justify-center items-center mt-4 w-full">
-          <Pagination
-            showControls
-            initialPage={page}
-            total={Math.ceil((analysis?.total || 0) / (analysis?.limit || 1))}
-            // total={10}
-            onChange={(page) => setPage(page)}
-          />
-        </div>
+        {analysis?.data && analysis.data.length > 0 && (
+          <div className="flex justify-center items-center mt-4 w-full">
+            <Pagination
+              showControls
+              initialPage={page}
+              total={Math.ceil((analysis?.total || 0) / (analysis?.limit || 1))}
+              onChange={(page) => setPage(page)}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

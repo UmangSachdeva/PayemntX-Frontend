@@ -1,13 +1,37 @@
 import { useGetMonthlyAverageSpend } from "@/api/queries/payment";
 import { Card, CardBody } from "@heroui/card";
 import { Progress } from "@heroui/progress";
+import { Skeleton } from "@heroui/skeleton";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 export const AverageMonthlySpend = () => {
-  const { data: monthlyAverage } = useGetMonthlyAverageSpend({});
+  const { data: monthlyAverage, isPending } = useGetMonthlyAverageSpend({});
 
   const isIncrease =
     monthlyAverage?.average_daily_spend || -1 > 0 ? true : false;
+
+  if (isPending) {
+    return (
+      <Card>
+        <CardBody>
+          <Skeleton className="h-[400px] w-full rounded-xl"></Skeleton>
+        </CardBody>
+      </Card>
+    );
+  }
+
+  if (!monthlyAverage) {
+    return (
+      <Card className="w-full h-full">
+        <CardBody className="flex flex-col items-center justify-center h-full">
+          <Icon icon="lucide:info" className="text-3xl text-default-400 mb-2" />
+          <div className="text-default-500 text-center">
+            No spend data available for the last 30 days.
+          </div>
+        </CardBody>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full h-full">

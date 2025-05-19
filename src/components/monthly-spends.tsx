@@ -2,11 +2,12 @@ import { useGetMonthlySpends } from "@/api/queries/payment";
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { BarChartComponent } from "./bar-chart";
 import { useState } from "react";
+import { Skeleton } from "@heroui/skeleton";
 
 export const MonthlySpends = () => {
   const [type] = useState<"DEBIT" | "CREDIT">("DEBIT");
 
-  const { data: debittransactions } = useGetMonthlySpends({
+  const { data: debittransactions, isPending } = useGetMonthlySpends({
     type: type,
   });
 
@@ -41,6 +42,28 @@ export const MonthlySpends = () => {
         ? Math.abs(item.total_spend.toFixed(2))
         : item.total_spend.toFixed(2),
   }));
+
+  if (isPending) {
+    return (
+      <Card>
+        <CardBody>
+          <Skeleton className="h-[400px] w-full rounded-xl"></Skeleton>
+        </CardBody>
+      </Card>
+    );
+  }
+
+  if (!chartData || chartData.length === 0) {
+    return (
+      <Card>
+        <CardBody className="flex items-center justify-center h-[400px] w-full">
+          <span className="text-gray-500">
+            No monthly spends data available.
+          </span>
+        </CardBody>
+      </Card>
+    );
+  }
 
   return (
     <Card>

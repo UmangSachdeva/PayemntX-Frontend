@@ -1,6 +1,6 @@
 import { LinkTokenResponse } from "@/types/payment";
 import axiosPrivate from "../axios/axiosPrivate";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Transaction } from "@/utils/parseTransactions";
 import { addToast } from "@heroui/toast";
 import { ErrorResponse } from "@/types/error";
@@ -24,9 +24,14 @@ export const useLinkBankAccount = () => {
 };
 
 export const useAddTransaction = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: addTransaction,
     mutationKey: ["add-transaction"],
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
     onError: (error: ErrorResponse) => {
       addToast({
         title: "Error",

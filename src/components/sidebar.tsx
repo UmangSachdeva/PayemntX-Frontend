@@ -13,7 +13,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
   const location = useLocation();
   const [_, setPathname] = useState<string>(location.pathname);
 
-  const { data: recentTransactions } = useGetUserTransactions({
+  const { data: recentTransactions, isPending } = useGetUserTransactions({
     limit: 3,
   });
 
@@ -21,8 +21,8 @@ export default function Sidebar({ isOpen }: SidebarProps) {
     { icon: "lucide:home", label: "Dashboard", to: "/dashboard" },
     { icon: "hugeicons:bank", label: "Transactions", to: "/transactions" },
     { icon: "lucide:chart-line", label: "Analysis", to: "/analysis" },
-    { icon: "lucide:calendar", label: "Calendar", to: "#" },
-    { icon: "lucide:settings", label: "Settings", to: "#" },
+    // { icon: "lucide:calendar", label: "Calendar", to: "#" },
+    // { icon: "lucide:settings", label: "Settings", to: "#" },
   ];
 
   const isActive = (path: string) => {
@@ -81,6 +81,44 @@ export default function Sidebar({ isOpen }: SidebarProps) {
           <Icon icon="lucide:clock" className="text-default-500" />
           {isOpen && "Recent Transactions"}
         </h3>
+
+        {!isPending &&
+          (!recentTransactions?.data ||
+            recentTransactions.data.length === 0) && (
+            <div
+              className={`
+              flex items-center gap-2
+              text-sm p-2 rounded-lg text-default-400
+              ${!isOpen && "justify-center"}
+            `}
+            >
+              <Icon icon="lucide:ban" className="text-default-300" />
+              {isOpen && <span>No recent transactions</span>}
+            </div>
+          )}
+
+        {isPending &&
+          Array.from({ length: 3 }).map((_, idx) => (
+            <div
+              key={idx}
+              className={`
+                flex items-center gap-2
+                text-sm p-2 rounded-lg 
+                animate-pulse bg-default-100
+                ${!isOpen && "justify-center"}
+              `}
+            >
+              <div
+                className={`rounded-full bg-default-300 ${!isOpen ? "w-6 h-6" : "w-5 h-5"}`}
+              />
+              {isOpen && (
+                <>
+                  <div className="flex-1 h-4 bg-default-300 rounded" />
+                  <div className="w-12 h-4 bg-default-300 rounded" />
+                </>
+              )}
+            </div>
+          ))}
 
         {recentTransactions?.data?.map((transaction) => (
           <div
